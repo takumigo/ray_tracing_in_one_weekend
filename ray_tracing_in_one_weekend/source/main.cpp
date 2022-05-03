@@ -1,3 +1,7 @@
+#include "rtweekend.h"
+#include "hittable_list.h"
+#include "sphere.h"
+
 #include <iostream>
 #include "color.h"
 #include "vec3.h"
@@ -19,16 +23,16 @@ double hit_sphere(const point3& center, double radius, const ray& r)
 	}
 }
 
-color ray_color(const ray& r)
+color ray_color(const ray& r,const hittable& world)
 {
-	auto t = hit_sphere(point3(0, 0, -1), 0.5, r);
-	if (t > 0.0) {
-		vec3 N = unit_vector(r.at(t) - vec3(0, 0, -1));
-		return 0.5 * color(N.x() + 1, N.y() + 1, N.z() + 1);
+	hit_record rec;
+	if (world.hit(r, 0, infinity, rec))
+	{
+		return 0.5 * (rec.normal + color(1, 1, 1));
 	}
 	// レイの方向ベクトルを正規化
 	vec3 unit_direction = unit_vector(r.direction());
-	t = 0.5 * (unit_direction.y() + 1.0);
+	auto t = 0.5 * (unit_direction.y() + 1.0);
 	return (1.0 - t) * color(1.0, 1.0, 1.0) + t * color(0.5, 0.7, 1.0);
 }
 
@@ -49,6 +53,10 @@ int main()
 	auto vertical = vec3(0, viewport_height, 0);
 	auto lower_left_corner = origin - horizontal / 2 - vertical / 2 - vec3(0, 0, focal_length);
 
+	hittable_list world;
+	world.add(make_shared<sphere>(point3(0, 0, -1), 0.5));
+	world.add(make_shared<sphere>(point3(0, -100.5, -1), 100));
+
 	for (int j = image_height - 1; j >= 0; --j)
 	{
 		std::cerr << "\nScanlines remaining: " << j << ' ' << std::flush;
@@ -58,7 +66,7 @@ int main()
 			auto v = double(j) / (image_height - 1);
 
 			ray r(origin, lower_left_corner + u * horizontal + v * vertical - origin);
-			color pixel_color = ray_color(r);
+			color pixel_color = ray_color(r,world);
 			write_color(std::cout, pixel_color);
 		}
 	}
