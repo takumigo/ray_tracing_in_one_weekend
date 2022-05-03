@@ -143,7 +143,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\color.h" />
+    <ClInclude Include="source\hittable.h" />
     <ClInclude Include="source\ray.h" />
+    <ClInclude Include="source\sphere.h" />
     <ClInclude Include="source\vec3.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -29,5 +29,11 @@
     <ClInclude Include="source\ray.h">
       <Filter>ソース ファイル</Filter>
     </ClInclude>
+    <ClInclude Include="source\hittable.h">
+      <Filter>ソース ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="source\sphere.h">
+      <Filter>ソース ファイル</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
