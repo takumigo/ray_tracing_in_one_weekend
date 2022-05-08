@@ -41,5 +41,8 @@
     <ClInclude Include="source\rtweekend.h">
       <Filter>ソース ファイル</Filter>
     </ClInclude>
+    <ClInclude Include="source\camera.h">
+      <Filter>ソース ファイル</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
