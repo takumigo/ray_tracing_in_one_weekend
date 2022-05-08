@@ -21,6 +21,18 @@ inline double degrees_to_radians(double degrees)
 	return degrees * pi / 180;
 }
 
+inline double random_double()
+{
+	// [0,1]‚ÌÀ”—”‚ğ•Ô‚·
+	return rand() / (RAND_MAX + 1.0);
+}
+
+inline double random_double(double min, double max)
+{
+	// [min,max]‚ÌÀ”—”‚ğ‚ğ•Ô‚·
+	return min + (max - min) * random_double();
+}
+
 // ‹¤’Êƒwƒbƒ_[
 #include "ray.h"
 #include "vec3.h"
