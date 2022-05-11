@@ -21,9 +21,9 @@ void write_color(std::ostream& out, color pixel_color, int sample_per_pixel)
 
 	// 色の和をサンプル数で割る
 	auto scale = 1.0 / sample_per_pixel;
-	r *= scale;
-	g *= scale;
-	b *= scale;
+	r = sqrt(scale * r);
+	g = sqrt(scale * g);
+	b = sqrt(scale * b);
 
 	// 各成分を[0,255]に変換して出力する
 	out << static_cast<int>(255.999 * clamp(r,0.0,0.999)) << ' '
