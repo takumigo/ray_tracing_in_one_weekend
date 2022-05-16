@@ -3,18 +3,35 @@
 
 #include "hittable.h"
 #include "vec3.h"
+#include "material.h"
 
 class sphere : public hittable
 {
 public:
 	sphere() {}
-	sphere(point3 cen, double r) :center(cen), radius(r) {}
+	sphere(point3 cen, double r,shared_ptr<material> m) :center(cen), radius(r) , mat_ptr(m){}
 
 	virtual bool hit(const ray& r, double t_min, double t_max, hit_record& rec) const;
 
 public:
 	point3 center;
 	double radius;
+	shared_ptr<material> mat_ptr;
+};
+
+class lambertian : public material
+{
+public:
+	lambertian(const color& a) :albedo(a){}
+	virtual bool scatter(const ray& r_in, const hit_record& rec, color& attenuation, ray& scattered) const
+	{
+		vec3 scatter_direction = rec.normal + random_unit_vector();
+		scattered = ray(rec.p, scatter_direction);
+		attenuation = albedo;
+		return true;
+	}
+public:
+	color albedo;
 };
 
 bool sphere::hit(const ray& r, double t_min, double t_max, hit_record& rec) const
@@ -35,6 +52,7 @@ bool sphere::hit(const ray& r, double t_min, double t_max, hit_record& rec) cons
 			rec.p = r.at(rec.t);
 			vec3 outward_normal = (rec.p - center) / radius;
 			rec.set_face_normal(r, outward_normal);
+			rec.mat_ptr = mat_ptr;
 			return true;
 		}
 		temp = (-half_b + root) / a;
@@ -44,6 +62,7 @@ bool sphere::hit(const ray& r, double t_min, double t_max, hit_record& rec) cons
 			rec.p = r.at(rec.t);
 			vec3 outward_normal = (rec.p - center) / radius;
 			rec.set_face_normal(r, outward_normal);
+			rec.mat_ptr = mat_ptr;
 			return true;
 		}
 	}
